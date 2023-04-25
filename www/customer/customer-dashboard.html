@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<head>
+	<title>Post Office</title>
+	<link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+	<link rel="stylesheet" href="/out/output.css">
+</head>
+<body>
+	<!--				-->
+	<!-- 	TOP BAR		-->
+	<!--				-->
+	<div class="fixed flex w-full p-2 bg-gray-800 rounded-b-md text-white shadow-lg">
+		<button class="font-mono hover:text-gray-400 active:text-gray-600">
+			<a href="/">	
+				Post Office
+			</a>
+		</button>
+		
+		<div class="flex-grow"></div>
+		
+		<a href="/" class="font-mono hover:text-gray-400 active:text-gray-600">
+			Log out
+		</a>
+	</div>
+	<div class="h-10"></div>
+
+	<!--				-->
+	<!--	CONTENT		-->
+	<!--				-->
+	<div class="h-10"></div>
+	
+	<div class="w-1/2 text-white space-y-2 mx-auto">
+		<!-- 	Customer Name	-->
+		<div id="c-customer-name" class="font-thin px-2">
+			Hello, Customer
+		</div>
+		<!--	Notifications	-->
+		<div id="c-notifications" class="rounded-lg bg-slate-700 shadow-md p-2" hidden>
+			<div class="flex w-full">
+				<div class="text-left text-xl font-bold font-mono flex-grow">Notifications</div>
+				<button id="c-dismiss-notifications-button" class="text-xs font-mono text-gray-200">Dismiss All</button>
+			</div>
+
+			<table id="c-d-notifications-table" class="w-full text-left font-mono text-sm">
+				<thead class="w-full bg-slate-800 text-white">
+					<th>Received</th>
+					<th>Message</th>
+				</thead>
+			</table>
+		</div>
+		<!--	Sent items	-->
+		<div id="c-sent-items" class="rounded-lg bg-slate-700 shadow-md p-2" hidden>
+			<div class="flex w-full">
+				<div class="text-left text-xl font-bold font-mono flex-grow">Sent items</div>
+			</div>
+
+			These are the latest updates on the items you have sent recently
+
+			<table id="c-d-sent-items-table" class="w-full text-left text-xs font-mono">
+				<thead class="w-full bg-slate-800 text-white">
+					<th>Item ID</th>
+					<th>Status</th>
+					<th>Location</th>
+					<th>Timestamp</th>
+				</thead>
+			</table>
+		</div>
+		<!--	Receiving items	-->
+		<div id="c-receiving-items" class="rounded-lg bg-slate-700 shadow-md p-2" hidden>
+			<div class="flex w-full">
+				<div class="text-left text-xl font-bold font-mono flex-grow">Receiving items</div>
+			</div>
+
+			These are the latest updates on items you're receiving
+
+			<table id="c-d-receiving-items-table" class="w-full text-left text-xs font-mono">
+				<thead class="w-full bg-slate-800 text-white">
+					<th>Item ID</th>
+					<th>Status</th>
+					<th>Location</th>
+					<th>Timestamp</th>
+				</thead>
+			</table>
+		</div>
+		<!--	Relevant links	-->
+		<div id="c-relevant-links" class="flex flex-col items-center rounded-lg bg-slate-700 shadow-md p-2">
+			<div class="flex w-full">
+				<div class="text-left text-xl font-bold font-mono flex-grow">Relevant links</div>
+			</div>
+
+			<!-- <a class="text-blue-300 underline">Drop off item</a> -->
+			<a class="text-blue-300 underline" href="/customerpage/customerprofile.html">View profile</a>
+			<a class="text-blue-300 underline" href="/">Log out</a>
+		</div>
+		<script>
+			function setCookie(name, value, days) {
+				var expires = "";
+				if (days) {
+					var date = new Date();
+					date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+					expires = "; expires=" + date.toUTCString();
+				}
+				document.cookie = name + "=" + (value || "") + expires + "; path=/";
+			}
+
+			function getCookie(name) {
+				var nameEQ = name + "=";
+				var ca = document.cookie.split(';');
+				for (var i = 0; i < ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+					if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+				}
+				return null;
+			}
+
+			function openTrackingPage(itemID) {
+				setCookie("check_item_id", `${itemID}`, 0.05);
+				window.open("/", '_blank').focus();
+			}
+
+			async function getNotifications() {
+				const response = await (await fetch("/api/notifications/customer/get-active-notifications", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({})
+				})).json();
+
+				if (!response.success) {
+					// Could not get notifications
+					alert(response.message);
+					return;
+				}
+
+				const notificationsTable = document.getElementById("c-d-notifications-table");
+				for (let i = 0; i < response.notifications.length; i++) {
+					const notification = response.notifications[i];
+
+					let localTimestamp = (new Date(notification.dateReceived)).toString();
+					localTimestamp = localTimestamp.substring(0, localTimestamp.lastIndexOf(":") + 3);
+
+					notificationsTable.innerHTML += `
+						<tr>
+							<td>${localTimestamp}</td>
+							<td>${notification.content}</td>
+						</tr>
+					`;
+				}
+
+				// Show the table if there are notifications
+				if (response.notifications.length > 0)
+					document.getElementById("c-notifications").removeAttribute("hidden");
+			}
+
+			async function dismissNotifications() {
+				const response = await (await fetch("/api/notifications/customer/dismiss-all-notifications", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({})
+				})).json();
+
+				if (!response.success) {
+					alert(response.message);
+					return;
+				}
+
+				document.getElementById("c-notifications").setAttribute("hidden", "");
+			}
+
+			async function getCustomerInfo() {
+				const response = await (await fetch("/api/auth/customer/get-customer-info", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({})
+				})).json();
+
+				if (!response.success) {
+					alert(response.message);
+					window.location.href = "/";
+					return;
+				}
+
+				document.getElementById("c-customer-name").innerHTML = `Hello, ${response.customer.firstName}`;
+			}
+
+			async function getSentItems() {
+				const response = await (await fetch("/api/items/get-formatted-sent-items", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({})
+				})).json();
+
+				if (!response.success) {
+					// Could not get notifications
+					alert(response.message);
+					return;
+				}
+
+				/*
+					response: {
+						success: true,
+						sentItems: [
+							{
+								itemID: number,
+								itemStatus: String,
+								lastLocation: String,
+								logTimestamp: Date (MySQL UTC format)
+							},
+							...
+						]
+					}
+				*/
+
+				const sentItemsTable = document.getElementById("c-d-sent-items-table");
+				for (let i = 0; i < response.sentItems.length; i++) {
+					const item = response.sentItems[i];
+
+					let localTimestamp = (new Date(item.logTimestamp)).toString();
+					localTimestamp = localTimestamp.substring(0, localTimestamp.lastIndexOf(":") + 3);
+
+					sentItemsTable.innerHTML += `
+						<tr>
+							<td><button onclick="openTrackingPage(${item.itemID})" class="underline">${item.itemID}</button></td>
+							<td>${item.itemStatus}</td>
+							<td>${item.lastLocation}</td>
+							<td>${localTimestamp}</td>
+						</tr>
+					`;
+				}
+
+				if (response.sentItems.length > 0)
+					document.getElementById("c-sent-items").removeAttribute("hidden");
+			}
+
+			async function getReceivingItems() {
+				const response = await (await fetch("/api/items/get-formatted-receiving-items", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({})
+				})).json();
+
+				if (!response.success) {
+					// Could not get notifications
+					alert(response.message);
+					return;
+				}
+
+				/*
+					response: {
+						success: true,
+						receivingItems: [
+							{
+								itemID: number,
+								itemStatus: String,
+								lastLocation: String,
+								logTimestamp: Date (MySQL UTC format)
+							},
+							...
+						]
+					}
+				*/
+
+				const receivingItemsTable = document.getElementById("c-d-receiving-items-table");
+				for (let i = 0; i < response.receivingItems.length; i++) {
+					const item = response.receivingItems[i];
+
+					let localTimestamp = (new Date(item.logTimestamp)).toString();
+					localTimestamp = localTimestamp.substring(0, localTimestamp.lastIndexOf(":") + 3);
+
+					receivingItemsTable.innerHTML += `
+						<tr>
+							<td><button onclick="openTrackingPage(${item.itemID})" class="underline">${item.itemID}</button></td>
+							<td>${item.itemStatus}</td>
+							<td>${item.lastLocation}</td>
+							<td>${localTimestamp}</td>
+						</tr>
+					`;
+				}
+
+				if (response.receivingItems.length > 0)
+					document.getElementById("c-receiving-items").removeAttribute("hidden");
+			}
+
+			window.onload = function() {
+				getNotifications();
+				getCustomerInfo();
+				getSentItems();
+				getReceivingItems();
+
+				document.getElementById("c-dismiss-notifications-button").onclick = dismissNotifications;
+			}
+		</script>
+	</div>
+
+	<div class="h-10"></div>
+</body>
+
+<footer class="bg-white w-full p-2 rounded-t-md">
+	<div class="flex w-full justify-center text-center flex-col space-y-2">
+		<div class="p-4 text-center text-xl font-thin">
+			<a href="/">Post Office</a>
+		</div>
+
+		<a href="/login/register.html">Create Account</a>
+		<a href="/login/employeelogin.html">Employee Page</a>
+	</div>
+</footer>
+</html>

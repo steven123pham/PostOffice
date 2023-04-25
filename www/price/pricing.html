@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/out/output.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet" />
+
+</head>
+<body class="font-sans bg-slate-500">
+    <!--NAVBAR-->
+    <body class="font-san">
+        <!--NAVBAR-->
+        <nav id="topbar" class="bg-gray-400">
+            <div class="z-10 border p-2 bg-gray-400 rounded-b-md">
+                <div class="flex justify-between">
+                    <!--Primary nav-->
+                    <div class="flex relative items-center">
+                        <a href="/mainpage.html#">Post Office</a>
+                    </div>
+                    <!--Secondary nav-->
+                    <div class="flex items-center">
+                        <a href="/price/pricing.html" class="py-3 px-2 text-gray-700">Pricing</a>
+                        <a href="#" class="py-3 px-2 text-gray-700">Employee Page</a>
+                        <a href="/login/login.html" class="py-3 px-2 text-gray-700">Register / Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="bg-gray-700 text-white w-screen -translate-y-2 p-2" style="height: calc(100vh - 60px)">
+            <div class="w-full h-2"></div>
+          <!-- Separator from the top -->
+            <div class="space-x-10">
+
+                <!-- Post Card -->
+                <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                    Post Card <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+
+                    <div id="dropdown" class="z-10 hidden bg-gray-400 divide-y divide-gray-400 rounded-lg shadow w-auto dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                            <label class="text-black font-bold mb-1 md:mb-0 mr-2 whitespace-nowrap" for="inline-full-name">Mail Post Cards Price $0.48</label>
+                            <input type="number" id="quantity-1" class="block w-auto p-4 text-gray-900 border border-black rounded-lg bg-gray-200 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 w:focus:border-blue-500" placeholder="quantity">
+                            <label class="text-black font-bold mb-1 md:mb-0 mr-2 whitespace-nowrap" for="inline-full-name">Priority Mail Stamped Post Cards Price $0.63</label>
+                            <input type="number" id="quantity-2" class="block w-auto p-4 text-gray-900 border border-black rounded-lg bg-gray-200 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 w:focus:border-blue-500" placeholder="quantity">
+                            <label class="text-black font-bold mb-1 md:mb-0 mr-2 whitespace-nowrap" for="inline-full-name">Calculate</label>
+                            <button id="Calculate" class="block py-4 w-60 text-gray-900 border border-black rounded-lg bg-white sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 w:focus:border-blue-500" onclick="postCardCalculate()">Calculate</button>
+                        </ul>
+                    </div>
+
+                <!-- Flat Envelope -->
+                <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown1" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                    Flat Envelope <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                
+                    <div id="dropdown1" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                            <label class="text-black font-bold mb-1 md:mb-0 mr-2 whitespace-nowrap" for="inline-full-name">Flats Envelope Price $0.48</label>
+                            <input type="number" id="quantity-1" class="block w-auto p-4 text-gray-900 border border-black rounded-lg bg-white sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 w:focus:border-blue-500" placeholder="quantity">
+                            <label class="text-black font-bold mb-1 md:mb-0 mr-2 whitespace-nowrap" for="inline-full-name">Priority Flats Envelope Price $0.63</label>
+                            <input type="number" id="quantity-2" class="block w-auto p-4 text-gray-900 border border-black rounded-lg bg-white sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 w:focus:border-blue-500" placeholder="quantity">
+                            <label class="text-black font-bold mb-1 md:mb-0 mr-2 whitespace-nowrap" for="inline-full-name">Calculate</label>
+                            <button id="Calculate" class="block py-4 w-60 text-gray-900 border border-black rounded-lg bg-white sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 w:focus:border-blue-500" onclick="postCardCalculate()">Calculate</button>
+                        </ul>
+                    </div>
+
+                <!-- Flat Rate Boxes  -->    
+                <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown2" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                    Flat Rate Boxes <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                
+                    <div id="dropdown2" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                            Large Box 23-11/16" x 11-3/4" x 3" or 12" x 12" x 5-1/2"
+                            Medim Box 13-5/8" x 11-7/8" x 3-3/8" or 11" x 8-1/2" x 5-1/2"
+                            Small Box 8-5/8" x 5-3/8" x 1-5/8"
+                            <div class="h-4"></div>
+                            <label class="text-black font-bold mb-1 md:mb-0 mr-2 whitespace-nowrap" for="inline-full-name">Large Box</label>
+                            <input type="number" id="quantity-5" class="block w-auto p-4 text-gray-900 border border-black rounded-lg bg-white sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 w:focus:border-blue-500" placeholder="quantity">
+                            
+                            <label class="text-black font-bold mb-1 md:mb-0 mr-2 whitespace-nowrap" for="inline-full-name">Large Box With Priority</label>
+                            <input type="number" id="quantity-6" class="block w-auto p-4 text-gray-900 border border-black rounded-lg bg-white sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 w:focus:border-blue-500" placeholder="quantity">
+                            
+                            <label class="text-black font-bold mb-1 md:mb-0 mr-2 whitespace-nowrap" for="inline-full-name">Medium Box</label>
+                            <input type="number" id="quantity-7" class="block w-auto p-4 text-gray-900 border border-black rounded-lg bg-white sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 w:focus:border-blue-500" placeholder="quantity">
+                            
+                            <label class="text-black font-bold mb-1 md:mb-0 mr-2 whitespace-nowrap" for="inline-full-name">Medium Box With Priority</label>
+                            <input type="number" id="quantity-8" class="block w-auto p-4 text-gray-900 border border-black rounded-lg bg-white sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 w:focus:border-blue-500" placeholder="quantity">
+                            
+                            <label class="text-black font-bold mb-1 md:mb-0 mr-2 whitespace-nowrap" for="inline-full-name">Small Box</label>
+                            <input type="number" id="quantity-9" class="block w-auto p-4 text-gray-900 border border-black rounded-lg bg-white sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 w:focus:border-blue-500" placeholder="quantity">
+                            
+                            <label class="text-black font-bold mb-1 md:mb-0 mr-2 whitespace-nowrap" for="inline-full-name">Small Box With Priority</label>
+                            <input type="number" id="quantity-10" class="block w-auto p-4 text-gray-900 border border-black rounded-lg bg-white sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 w:focus:border-blue-500" placeholder="quantity">
+                            
+                            <label class="text-black font-bold mb-1 md:mb-0 mr-2 whitespace-nowrap" for="inline-full-name">Calculate</label>
+                            <button id="Calculate" class="block py-4 w-60 text-gray-900 border border-black rounded-lg bg-white sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 w:focus:border-blue-500" onclick="boxCalculate()">Calculate</button>
+                        </ul>
+                    </div>                        
+            </div>
+        </div>
+        <script src="pricing.js" ></script>
+        <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.js"></script>
+
+</body>
+</html>

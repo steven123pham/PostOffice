@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+	background-color: rgb(71 85 105);
+}
+
+table {
+	border-radius: 0.5rem;
+	border-bottom: 2px black;
+	border-bottom-color: black;
+	text-align: center;
+	background-color: rgb(71 85 105);
+	color: white;
+}

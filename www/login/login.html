@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="/out/output.css" rel="stylesheet" />
+</head>
+
+<body>
+  <!-- TOPBAR -->
+  <nav id="topbar" class="bg-gray-400">
+    <div class="z-10 border p-2 bg-gray-400 rounded-b-md">
+      <div class="flex justify-between">
+        <!--Primary nav-->
+        <div class="flex relative items-center">
+          <a href="/index.html">Post Office</a>
+        </div>
+        <!--Secondary nav-->
+        <div class="flex items-center">
+          <a href="/price/pricing.html" class="py-3 px-2 text-gray-700">Pricing</a>
+          <a href="/login/employeelogin.html" class="py-3 px-2 text-gray-700">Employee Page</a>
+          <a href="/index.html" class="py-3 px-2 text-gray-700">Register / Sign in</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BODY -->
+  <div class="bg-gray-700 text-white w-full -translate-y-2 p-2" style="height: calc(100vh - 60px)">
+    <div class="w-full"></div>
+    <!-- Separator from the top -->
+    <div id="sizeChange" class="flex relative text-black self-center justify-center max-w-60" style="height: 290px">
+      <div class="p-2 bg-slate-200 rounded-md w-full h-full max-w-md items-center content-center justify-center">
+        <div class="flex relative flex-grow justify-center font-semibold text-2xl">
+          <b>Log in</b>
+        </div>
+        <div class="h-6"></div>
+
+        <div class="text-xs font-semibold">Username</div>
+        <input id="field-username" class="p-1 w-full rounded-md" placeholder="Username" />
+
+        <div class="h-4"></div>
+        <div class="text-xs font-semibold">Password</div>
+        <input id="field-password" class="p-1 w-full rounded-md" placeholder="Password" type="password" />
+
+        <div id="newTextField"></div>
+
+        <div class="h-8"></div>
+
+        <div class="flex relative w-full place-content-center">
+          <a>
+            <button id="button-log-in"
+              class="flex relative bg-green-500 active:bg-green-600 w-32 rounded-md border-green-700 border-2 place-content-center">
+              Log in
+            </button>
+          </a>
+        </div>
+        <div class="h-2"></div>
+        <div class="flex relative w-full place-content-center">
+          <a href="/login/register.html">
+            <button id="button-create-account"
+              class="flex relative bg-gray-400 active:bg-gray-500 w-32 rounded-md border-gray-600 border-2 place-content-center">
+              Create account
+            </button>
+          </a>
+        </div>
+        <script>
+          function createCookie(name, value, days) {
+            var expires;
+            if (days) {
+              var date = new Date();
+              date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+              expires = "; expires=" + date.toGMTString();
+            }
+            else {
+              expires = "";
+            }
+            document.cookie = name + "=" + value + expires + "; path=/";
+          }
+
+          async function logIn() {
+            var data = {
+              "username": document.getElementById("field-username").value,
+              "password": document.getElementById("field-password").value
+            };
+
+            const response = await fetch("/api/auth/customer/log-in", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(data)
+            });
+
+			const responseJSON = await response.json();
+
+			if (!responseJSON.success) {
+				alert("Your account does not exist");
+			} else {
+				createCookie("customer_access_token", responseJSON.accessToken, 30);
+				window.location.replace("/customer/customer-dashboard.html");
+			}
+          }
+          document.getElementById("button-log-in").onclick = logIn;
+        </script>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
